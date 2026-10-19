@@ -1,0 +1,97 @@
+{
+  "project_name": "CampusFit Planner",
+  "archetype": "ARCHETYPE 2: PERFORMANCE PRO & SWISS HIGH-CONTRAST (Encouraging, Non-Judgmental Student Fitness)",
+  "emotional_tone": "Restrained, encouraging, calm, focused, structured, non-judgmental. High-contrast precision designed for tertiary students balancing academic timetables and realistic physical routines.",
+  "theme": "Light & Dark Mode Adaptive (Default: Modern Deep Obsidian & Slate background with crisp warm white card surfaces in light mode, high contrast typography, zero clutter)",
+  "typography": {
+    "heading_font": "Outfit, Cabinet Grotesk, sans-serif",
+    "subheading_font": "Barlow Condensed, sans-serif",
+    "body_font": "Inter, system-ui, sans-serif",
+    "mono_font": "JetBrains Mono, monospace",
+    "anti_pattern_rule": "NEVER use Inter for main titles or H1/H2 headlines. Use Outfit or Cabinet Grotesk with tracking-tight. Mono font reserved for rest timers, rep counts, timestamp tags, and calendar slot hours.",
+    "hierarchy": {
+      "h1": "text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-tight",
+      "h2": "text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight",
+      "h3": "text-xl sm:text-2xl font-semibold tracking-normal",
+      "h4": "text-lg sm:text-xl font-medium",
+      "body": "text-base leading-relaxed text-slate-700 dark:text-slate-300",
+      "small_label": "text-xs font-semibold uppercase tracking-widest text-slate-500 dark:text-slate-400"
+    }
+  },
+  "colors": {
+    "primary": {
+      "light": "#0F172A",
+      "dark": "#F8FAFC",
+      "accent_emerald": "#10B981",
+      "accent_indigo": "#4F46E5",
+      "accent_amber": "#F59E0B"
+    },
+    "background": {
+      "light_page": "#F8FAFC",
+      "light_card": "#FFFFFF",
+      "dark_page": "#090D16",
+      "dark_card": "#131C2E"
+    },
+    "neutrals": {
+      "border_light": "#E2E8F0",
+      "border_dark": "#1E293B",
+      "text_muted": "#64748B",
+      "focus_ring": "#2563EB"
+    },
+    "contrast_rules": "All text must strictly meet minimum 4.5:1 WCAG AA contrast ratio. Interactive buttons must have a distinct 2px focus ring with 4px offset. Never use color alone to signal status (always pair color with icons and descriptive text, e.g., 'Completed [Checkmark]')."
+  },
+  "layout_and_spacing": {
+    "philosophy": "Generous spacing philosophy (2-3x default padding). Ample negative space to prevent cognitive overwhelm during busy study weeks.",
+    "bento_grid": "Mode B: High Density & Scanning for Dashboard / Weekly Calendar. Mode A: Tetris style for Onboarding Preview and Feature highlights.",
+    "container_padding": "Internal padding of p-6 or p-8 inside bordered cards to avoid text collision.",
+    "responsive_breakpoints": "Mobile-first structure. Single column grid on mobile (grid-cols-1), expand to md:grid-cols-2 lg:grid-cols-3 or 12-column grid for timetable builder."
+  },
+  "component_guidelines": {
+    "navigation": {
+      "type": "Top Navbar with sticky crystal glassmorphism (backdrop-blur-md bg-white/85 dark:bg-slate-950/85 border-b border-slate-200 dark:border-slate-800 z-50)",
+      "links": ["Plan", "Start", "Reschedule", "Library", "Peers", "Progress"],
+      "accessibility": "Includes a skip-to-content link ('#main-content') at the top of DOM, visible on focus."
+    },
+    "onboarding_wizard": {
+      "pattern": "One question at a time with instant inline validation and step indicators. Right-hand live preview panel showing real-time suggested weekly timetable grid.",
+      "steps": ["Fitness Goal", "Experience Level", "Available Days & Start Times", "Session Length (10-60m step 5)", "Equipment (None/Basic/Full Gym)", "Location (Gym/Residence Room/Home)"]
+    },
+    "weekly_builder": {
+      "pattern": "Interactive drag-and-drop or explicit 'Reschedule' / 'Swap' modal buttons. Includes explicit 'Plan Saved' toast notification and unsaved changes confirmation banner."
+    },
+    "dashboard": {
+      "pattern": "Focus on Next Session card with large 'Start Session' action button. Non-judgmental missed session handler offering neutral choices: 'Move this session' or 'Continue with next session' without guilt messages."
+    },
+    "workout_player": {
+      "pattern": "Single-exercise step view featuring clear exercise photo, target reps/duration, step-by-step instructions, rest timer with +30s/-10s adjustments, exercise substitution button, and non-intrusive safety note."
+    },
+    "peer_accountability": {
+      "pattern": "Opt-in social feed with 'Well done' reactions, friend requests by username, mute/block/report actions. Privacy by default (sharing workouts disabled by default)."
+    },
+    "challenges": {
+      "pattern": "Small group consistency challenges (max 8 members), cooperative language ('8/8 days completed together'), NO competitive leaderboards or rankings."
+    }
+  },
+  "accessibility_requirements": {
+    "wcag_level": "WCAG 2.0 AA Compliant",
+    "keyboard": "100% keyboard operable with visible outline-2 ring-offset-2 focus indicators.",
+    "screen_reader": "aria-live regions for timer count updates, plan saved alerts, and rest countdowns.",
+    "labels": "Icons must ALWAYS be paired with visible text labels or clear aria-labels.",
+    "data_testid_rule": "EVERY button, input, navigation link, workout card, metric item, dropdown, and tab MUST include a descriptive data-testid attribute in kebab-case (e.g. data-testid='start-workout-button')."
+  },
+  "image_urls": {
+    "hero_student_gym": "https://images.unsplash.com/photo-1554284126-aa88f22d8b74?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NzB8MHwxfHNlYXJjaHwzfHxzdHVkZW50JTIwd29ya291dCUyMGZpdG5lc3MlMjBneW0lMjBib2R5d2VpZ2h0JTIwZXhlcmNpc2VzfGVufDB8fHxibGFja3wxNzkyNDI0OTQ2fDA&ixlib=rb-4.1.0&q=85",
+    "pushup_bodyweight": "https://images.unsplash.com/photo-1598971457999-ca4ef48a9a71?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzNzl8MHwxfHNlYXJjaHw0fHxmaXRuZXNzJTIwZXhlcmNpc2UlMjBkdW1iYmVsbCUyMHNxdWF0JTIwcHVzaHVwJTIwd29ya291dCUyMHN0cmV0Y2h8ZW58MHx8fHwxNzkyNDI0OTQ2fDA&ixlib=rb-4.1.0&q=85",
+    "dumbbell_row": "https://images.unsplash.com/photo-1546483875-ad9014c88eba?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzNzl8MHwxfHNlYXJjaHwxfHxmaXRuZXNzJTIwZXhlcmNpc2UlMjBkdW1iYmVsbCUyMHNxdWF0JTIwcHVzaHVwJTIwd29ya291dCUyMHN0cmV0Y2h8ZW58MHx8fHwxNzkyNDI0OTQ2fDA&ixlib=rb-4.1.0&q=85",
+    "squat_workout": "https://images.pexels.com/photos/4753996/pexels-photo-4753996.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+    "stretch_warmup": "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzNzl8MHwxfHNlYXJjaHwzfHxmaXRuZXNzJTIwZXhlcmNpc2UlMjBkdW1iYmVsbCUyMHNxdWF0JTIwcHVzaHVwJTIwd29ya291dCUyMHN0cmV0Y2h8ZW58MHx8fHwxNzkyNDI0OTQ2fDA&ixlib=rb-4.1.0&q=85",
+    "kettlebell_home": "https://images.unsplash.com/photo-1507398941214-572c25f4b1dc?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NzB8MHwxfHNlYXJjaHw0fHxzdHVkZW50JTIwd29ya291dCUyMGZpdG5lc3MlMjBneW0lMjBib2R5d2VpZ2h0JTIwZXhlcmNpc2VzfGVufDB8fHxibGFja3wxNzkyNDI0OTQ2fDA&ixlib=rb-4.1.0&q=85"
+  },
+  "instructions_to_main_agent": [
+    "Strictly follow the JSON rules specified above.",
+    "Do NOT alter or delete /app/design_guidelines.json once created.",
+    "Ensure all components are implemented using React js and Tailwind CSS with shadcn primitives.",
+    "All interactive elements must have clear data-testid attributes for automated verification.",
+    "Maintain high contrast, generous spacing, visible focus indicators, skip link, and aria-live announcements."
+  ]
+}

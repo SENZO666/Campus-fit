@@ -1,0 +1,146 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        --background: 210 40% 98%;
+        --foreground: 222 47% 11%;
+        --card: 0 0% 100%;
+        --card-foreground: 222 47% 11%;
+        --popover: 0 0% 100%;
+        --popover-foreground: 222 47% 11%;
+        --primary: 222 47% 11%;
+        --primary-foreground: 210 40% 98%;
+        --secondary: 210 40% 96%;
+        --secondary-foreground: 222 47% 11%;
+        --muted: 210 40% 94%;
+        --muted-foreground: 215 19% 35%;
+        --accent: 214 32% 91%;
+        --accent-foreground: 222 47% 11%;
+        --destructive: 0 72% 42%;
+        --destructive-foreground: 0 0% 100%;
+        --border: 214 32% 88%;
+        --input: 215 16% 47%;
+        --ring: 221 83% 53%;
+        --chart-1: 222 47% 11%;
+        --chart-2: 160 84% 39%;
+        --chart-3: 243 75% 59%;
+        --chart-4: 38 92% 50%;
+        --chart-5: 215 16% 47%;
+        --radius: 0.75rem;
+    }
+}
+
+@layer base {
+    * {
+        @apply border-border;
+    }
+    html {
+        scroll-behavior: smooth;
+    }
+    body {
+        @apply bg-background text-foreground font-sans antialiased;
+    }
+    h1, h2, h3, h4 {
+        font-family: 'Outfit', sans-serif;
+        letter-spacing: -0.02em;
+    }
+    ::selection {
+        background: #10b981;
+        color: #090d16;
+    }
+}
+
+/* Visible, consistent focus for every interactive element (WCAG 2.4.7) */
+*:focus-visible {
+    outline: 2px solid #2563eb !important;
+    outline-offset: 3px !important;
+    box-shadow: none;
+}
+.on-dark *:focus-visible,
+.on-dark:focus-visible {
+    outline-color: #93c5fd !important;
+}
+#main-content:focus,
+#main-content:focus-visible,
+.no-focus-ring:focus,
+.no-focus-ring:focus-visible {
+    outline: none !important;
+}
+
+@layer utilities {
+    .stagger > * {
+        animation: rise 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    }
+    .stagger > *:nth-child(2) { animation-delay: 70ms; }
+    .stagger > *:nth-child(3) { animation-delay: 140ms; }
+    .stagger > *:nth-child(4) { animation-delay: 210ms; }
+    .stagger > *:nth-child(5) { animation-delay: 280ms; }
+    .stagger > *:nth-child(6) { animation-delay: 350ms; }
+    .stagger > *:nth-child(7) { animation-delay: 420ms; }
+    .grain {
+        position: relative;
+        isolation: isolate;
+    }
+    .grain::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        pointer-events: none;
+        opacity: 0.07;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+    .grid-lines {
+        background-image: linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px),
+            linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px);
+        background-size: 56px 56px;
+    }
+}
+
+@keyframes rise {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-delay: 0ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+@layer base {
+    [data-debug-wrapper="true"] {
+        display: contents !important;
+    }
+
+    [data-debug-wrapper="true"] > * {
+        margin-left: inherit;
+        margin-right: inherit;
+        margin-top: inherit;
+        margin-bottom: inherit;
+        padding-left: inherit;
+        padding-right: inherit;
+        padding-top: inherit;
+        padding-bottom: inherit;
+        column-gap: inherit;
+        row-gap: inherit;
+        gap: inherit;
+        border-left-width: inherit;
+        border-right-width: inherit;
+        border-top-width: inherit;
+        border-bottom-width: inherit;
+        border-left-style: inherit;
+        border-right-style: inherit;
+        border-top-style: inherit;
+        border-bottom-style: inherit;
+        border-left-color: inherit;
+        border-right-color: inherit;
+        border-top-color: inherit;
+        border-bottom-color: inherit;
+    }
+}
