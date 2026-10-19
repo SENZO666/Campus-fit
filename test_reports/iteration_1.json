@@ -1,0 +1,47 @@
+{
+  "summary": "First full E2E run of CampusFit Planner. Backend: 20 pytest cases all pass (auth/cookies/lockout/bcrypt, profile, preview, session builder 10-60 bounds, no-equipment filtering, week save/get/clear/regenerate, reschedule incl. past-date rejection, skip, complete, share, progress/streak, privacy, account, lookup, feed + reactions, peer requests/accept, mute/block/report, challenges create/join/leave/invite, admin reports resolve + 403 for students). No 500s in backend logs. Frontend (Playwright, desktop 1920 + mobile 390): register validation + duplicate username, onboarding 6 steps with inline errors and live preview, plan builder (banner, shorter/longer 10-60, replace, swap Similar/Library, no equipment ever shown for 'none', unsaved-changes dialog, Save -> 'Plan saved' + banner), calendar (status badges with icon+label, Reschedule dialog min=today, past-date error, move + Undo, prev/next week, desktop drag-and-drop + Undo, clear week keeps Completed), dashboard (next session, Start, week summary, streak card, missed-sessions panel tested by faking browser date: Continue -> Undo, Move -> reschedule), guided workout (image, steps, set done, rest timer countdown/+15/-15/skip, pause/resume, substitute, skip exercise, progress %, end -> completion form, share off by default, effort, mark complete -> celebration, workout-already-complete, Completed on calendar), progress stats + chart/table + share toggle, show_streaks off hides progress streak and dashboard streak card, library (44 exercises, 0 broken images, search, 3 shadcn filters, clear, detail dialog), settings (training save -> Update my plan, privacy switches with toast, account dup username error + rename), peers (feed, Well done toggle, mute hides feed items + 'Muted' label, unmute, block confirm dialog, report dialog with validation, find not-found + send request, sipho accepts), challenges (seeded card group-only progress, create with validation, copy code, invite peer -> invitee Join/Decline, invalid code error, join by code, leave), admin (lands on /admin, admin redirected away from student pages, student redirected from /admin, resolve + open/resolved/all filters), mobile menu sheet, calendar stacking, workout page at 390px. Nearly everything works; issues found are minor/moderate.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "POST /api/admin/reports/{id}/reopen", "issue": "Invalid/unknown id returns 200 ok (queries _id None) instead of 404; resolve endpoint correctly 404s."},
+      {"endpoint": "POST /api/challenges/join", "issue": "Only checks block relation with the owner, not with other members - a blocked user can join a challenge where a member blocked them via code."},
+      {"endpoint": "CORS", "issue": "CORS_ORIGINS='*' with allow_credentials=True; auth playbook recommends explicit origins (works today because frontend and API are same-origin)."},
+      {"endpoint": "POST /api/plan/preview (onboarding)", "issue": "Onboarding preview call sends no 'today'/'week_start', so mid-week the live preview may show sessions on days that already passed, while the real plan won't."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "AuthContext (register/login race)", "issue": "If the user submits Register (or Login) before the initial GET /auth/me -> /auth/refresh chain finishes, the late failure calls setUser(false) and overwrites the just-registered user, kicking them back to /login. Reproduced once when submitting within ~1s of page load. Fix: in the mount effect ignore the stale result, e.g. .catch(() => setUser(prev => prev || false)) and .then only if prev is null.", "selector": "[data-testid='register-submit-button']", "priority": "MEDIUM"},
+      {"component": "AppShell focus management / SkipLink", "issue": "AppShell focuses <main> on every route change including first load (mainRef.focus in useEffect), so the first Tab goes to the first control inside main and the skip link plus header nav are skipped (only reachable with Shift+Tab). Review requirement 'skip link appears on Tab focus' fails on app pages. Suggest skipping the focus on initial mount or focusing a visually hidden route-announcer placed before the skip link.", "selector": "[data-testid='skip-to-content-link']", "priority": "MEDIUM"},
+      {"component": "Workout end early", "issue": "After 'End workout' -> 'End and review' with 1 of 7 exercises done, progress bar shows '100% done' / 'All exercises done', which contradicts the summary 'You did 1 of 7 exercises'.", "selector": "[data-testid='workout-progress-percent']", "priority": "LOW"}
+    ],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Global toasts", "issues": ["Sonner toasts render top-center over the header nav (cover Calendar/Library/Progress links) for several seconds; consider bottom-right/bottom-center."]},
+      {"screen": "Header", "issues": ["Logo text 'CampusFit Planner' wraps to two lines when the display name is longer (e.g. 'TEST UI Renamed' at 1920px) and always on 390px mobile."]},
+      {"screen": "Plan builder / Challenges", "issues": ["Native <select> used for session Day (plan-session-day-N), challenge target (challenge-target-select) and Invite a peer (invite-select-*), and native time inputs, while Library uses shadcn Select - inconsistent look; native dropdown list renders OS-styled in the create-challenge dialog."]},
+      {"screen": "Calendar desktop", "issues": ["Day columns are narrow (~133px) at 1280 container; 'Reschedule' button nearly touches/overflows card edge."]}
+    ]
+  },
+  "test_report_links": ["/app/backend/tests/test_campusfit_api.py", "/app/test_reports/pytest/pytest_results.xml"],
+  "action_items": [
+    "Fix AuthContext mount race so a late /auth/me failure doesn't log out a user who just registered/logged in",
+    "Don't steal focus to <main> on initial load so the skip link is the first Tab stop (keep route-change focus for later navigations)",
+    "Show real completion % (not 100%) when a workout is ended early",
+    "Optional: move toasts away from header nav; prevent logo wrap; use shadcn Select for plan day/challenge target/invite selects",
+    "Optional backend: reopen 404 for unknown id; block check against all challenge members on join; explicit CORS origins; pass today/week_start in onboarding preview"
+  ],
+  "critical_code_review_comments": [
+    "pytest.ini runs with xdist '-n --dist loadscope'; the provided test file has cross-class ordering (privacy test before peer test, report before admin), run it with '-n0' for deterministic results",
+    "auth_routes.register imports 're' inside the function - move to module top",
+    "save_week deletes non-completed sessions from today onward then inserts - no transaction; a validation failure after delete is not possible as validation happens first, OK, but duplicate sessions on a date that already has a completed session are allowed",
+    "Dashboard missed-sessions only considers the current week; planned sessions left over from previous weeks never surface as missed"
+  ],
+  "updated_files": ["/app/backend/tests/test_campusfit_api.py"],
+  "success_rate": {"backend": "100% (20/20)", "frontend": "~95% (all core flows pass; 3 minor/moderate bugs)"},
+  "test_credentials": "From /app/memory/test_credentials.md - all worked (admin + thandi/lebo/sipho).",
+  "seed_data_creation": "Created throwaway users test_*@example.com and ui_*@example.com (password Testpass#1 for ui_*). Cleaned up: thandi<->sipho peer link deleted, TEST challenges deleted, mute/block reverted, privacy of demo users at defaults. Two resolved reports remain in admin (TEST report, TEST UI report thandi->lebo). Thandi 'Well done' toggled twice (net unchanged). Lebo's DnD move was undone.",
+  "retest_needed": true,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Run backend with: cd /app/backend && REACT_APP_BACKEND_URL=... MONGO_URL=mongodb://localhost:27017 DB_NAME=test_database pytest tests/test_campusfit_api.py -n0. Server date 2026-10-19 (Monday). To test missed sessions, insert a planned session dated earlier in the current week and override browser Date via add_init_script (done successfully with fake date 2026-10-22). Wait ~2.5s after page load before submitting login/register to avoid the auth race. Nav testids are nav-<label>-link (desktop, visible >=1280px) and nav-<label>-link-mobile. Not tested: week-switch-next save in plan builder, settings Muted/blocked tab Unmute/Unblock buttons via UI (API tested), refresh-token expiry flow."
+}

@@ -38,7 +38,7 @@ function Frame({ children, header }) {
   );
 }
 
-function WorkoutHeader({ title, minutes, index, count, percent, paused, finished, onEnd, onPause }) {
+function WorkoutHeader({ title, minutes, index, count, percent, doneCount, paused, finished, onEnd, onPause }) {
   return (
     <header className="sticky top-0 z-30 border-b border-white/10 bg-obsidian/95 backdrop-blur-md">
       <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-3 sm:px-6">
@@ -53,7 +53,7 @@ function WorkoutHeader({ title, minutes, index, count, percent, paused, finished
       </div>
       <div className="mx-auto max-w-6xl px-4 pb-4 sm:px-6">
         <div className="flex justify-between font-mono text-xs text-slate-300">
-          <span data-testid="workout-progress-label">{finished ? "All exercises done" : `Exercise ${index + 1} of ${count}`}</span>
+          <span data-testid="workout-progress-label">{finished ? `${doneCount} of ${count} exercises done` : `Exercise ${index + 1} of ${count}`}</span>
           <span data-testid="workout-progress-percent">{percent}% done</span>
         </div>
         <div role="progressbar" aria-label="Workout progress" aria-valuemin={0} aria-valuemax={100} aria-valuenow={percent}
@@ -82,7 +82,7 @@ function Player({ session, exerciseMap }) {
   const exercise = item && exerciseMap[item.exercise_id];
   const totalSets = items.reduce((a, i) => a + i.sets, 0);
   const passed = phase === "finish"
-    ? totalSets
+    ? doneIdx.reduce((a, i) => a + items[i].sets, 0)
     : items.slice(0, index).reduce((a, i) => a + i.sets, 0) + (setNo - 1) + (phase === "rest" ? 1 : 0);
   const percent = Math.round((passed / totalSets) * 100);
   const nameAt = (i) => exerciseMap[items[i]?.exercise_id]?.name;
@@ -143,7 +143,7 @@ function Player({ session, exerciseMap }) {
     : nameAt(index + 1) || "Finish";
 
   const header = (
-    <WorkoutHeader title={session.title} minutes={session.duration_min} index={index} count={items.length} percent={percent}
+    <WorkoutHeader title={session.title} minutes={session.duration_min} index={index} count={items.length} percent={percent} doneCount={doneIdx.length}
       paused={paused} finished={phase === "finish"} onEnd={() => setDialog("end")} onPause={() => setPaused(!paused)} />
   );
 

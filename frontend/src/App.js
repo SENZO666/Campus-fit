@@ -74,7 +74,7 @@ function App() {
     <AuthProvider>
       <AnnouncerProvider>
         <RouterProvider router={router} />
-        <Toaster position="top-center" theme="light" closeButton toastOptions={{ className: "font-sans" }} />
+        <Toaster position="top-right" offset={80} theme="light" closeButton toastOptions={{ className: "font-sans" }} />
       </AnnouncerProvider>
     </AuthProvider>
   );

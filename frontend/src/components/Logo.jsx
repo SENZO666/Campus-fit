@@ -13,10 +13,10 @@ export function Logo({ inverted = false, compact = false }) {
       >
         <Activity className="h-5 w-5" strokeWidth={2.5} />
       </span>
-      <span className={cn("font-display text-lg font-bold tracking-tight", inverted ? "text-white" : "text-slate-900")}>
+      <span className={cn("whitespace-nowrap font-display text-lg font-bold tracking-tight", inverted ? "text-white" : "text-slate-900")}>
         CampusFit
         {!compact && (
-          <span className={cn("font-medium", inverted ? "text-slate-300" : "text-slate-600")}> Planner</span>
+          <span className={cn("hidden font-medium sm:inline", inverted ? "text-slate-300" : "text-slate-600")}> Planner</span>
         )}
       </span>
     </span>

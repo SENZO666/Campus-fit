@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
 import { FieldError, TextField } from "@/components/FormField";
 import { api, errorMessage } from "@/lib/api";
@@ -55,10 +56,16 @@ export function CreateChallengeDialog({ open, onOpenChange }) {
             onChange={(e) => setForm({ ...form, name: e.target.value })} error={errors.name} testid="challenge-name-input" />
           <div>
             <Label htmlFor="challenge-target" className="text-sm font-semibold">Sessions each this week</Label>
-            <select id="challenge-target" value={form.target} onChange={(e) => setForm({ ...form, target: e.target.value })}
-              className="mt-2 h-12 w-full rounded-lg border border-slate-400 bg-white px-3" data-testid="challenge-target-select">
-              {[1, 2, 3, 4, 5, 6, 7].map((n) => <option key={n} value={n}>{plural(n, "session")} per member</option>)}
-            </select>
+            <Select value={form.target} onValueChange={(v) => setForm({ ...form, target: v })}>
+              <SelectTrigger id="challenge-target" className="mt-2 h-12 rounded-lg border-slate-400 bg-white" data-testid="challenge-target-select">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {[1, 2, 3, 4, 5, 6, 7].map((n) => (
+                  <SelectItem key={n} value={String(n)} data-testid={`challenge-target-option-${n}`}>{plural(n, "session")} per member</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
           <fieldset>
             <legend className="text-sm font-semibold">Week</legend>
@@ -148,11 +155,16 @@ function InviteRow({ challenge, peers }) {
     <div className="flex flex-col gap-2 sm:flex-row sm:items-end">
       <div className="flex-1">
         <Label htmlFor={`invite-${challenge.id}`} className="text-sm font-semibold">Invite a peer</Label>
-        <select id={`invite-${challenge.id}`} value={selected} onChange={(e) => setSelected(e.target.value)}
-          className="mt-2 h-11 w-full rounded-lg border border-slate-400 bg-white px-3 text-sm" data-testid={`invite-select-${challenge.id}`}>
-          <option value="">Choose a peer</option>
-          {eligible.map((p) => <option key={p.user.id} value={p.user.id}>{p.user.name} (@{p.user.username})</option>)}
-        </select>
+        <Select value={selected} onValueChange={setSelected}>
+          <SelectTrigger id={`invite-${challenge.id}`} className="mt-2 h-11 rounded-lg border-slate-400 bg-white" data-testid={`invite-select-${challenge.id}`}>
+            <SelectValue placeholder="Choose a peer" />
+          </SelectTrigger>
+          <SelectContent>
+            {eligible.map((p) => (
+              <SelectItem key={p.user.id} value={p.user.id} data-testid={`invite-option-${p.user.username}`}>{p.user.name} (@{p.user.username})</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
       <Button variant="outline" onClick={invite} data-testid={`invite-button-${challenge.id}`}><UserPlus aria-hidden="true" />Invite</Button>
     </div>

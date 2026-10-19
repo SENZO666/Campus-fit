@@ -30,15 +30,15 @@ export function CalendarSessionCard({ session, today, onReschedule, onDragStart,
       <p className="mt-0.5 text-xs text-slate-600">{session.duration_min} min · {session.items.length} exercises</p>
       <StatusBadge state={state} className="mt-2.5" testid={`calendar-status-${session.id}`} />
       {movable && (
-        <div className="mt-3 flex flex-wrap gap-1.5">
+        <div className="mt-3 grid gap-1.5">
           {startable && (
-            <Button asChild size="sm" className="h-8 px-3 text-xs">
+            <Button asChild size="sm" className="h-8 w-full px-3 text-xs">
               <Link to={`/workout/${session.id}`} data-testid={`calendar-start-${session.id}`}>
                 <Play aria-hidden="true" />Start<span className="sr-only"> {session.title}</span>
               </Link>
             </Button>
           )}
-          <Button size="sm" variant="outline" className="h-8 px-3 text-xs" onClick={() => onReschedule(session)} data-testid={`calendar-reschedule-${session.id}`}>
+          <Button size="sm" variant="outline" className="h-8 w-full px-2 text-xs" onClick={() => onReschedule(session)} data-testid={`calendar-reschedule-${session.id}`}>
             <CalendarClock aria-hidden="true" />Reschedule<span className="sr-only"> {session.title}</span>
           </Button>
         </div>

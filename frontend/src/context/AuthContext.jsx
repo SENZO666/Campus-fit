@@ -10,7 +10,9 @@ export function AuthProvider({ children }) {
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    api.get("/auth/me").then((r) => setUser(r.data)).catch(() => setUser(false));
+    api.get("/auth/me")
+      .then((r) => setUser((prev) => prev ?? r.data))
+      .catch(() => setUser((prev) => prev || false));
   }, []);
 
   const login = useCallback(async (email, password) => {

@@ -1,4 +1,3 @@
-from bson import ObjectId
 from fastapi import APIRouter, Depends, HTTPException
 
 from core import Report, User, db, get_current_user, now_iso, to_oid, users_by_ids
@@ -36,6 +35,7 @@ async def resolve(report_id: str, admin: User = Depends(require_admin)):
 
 @router.post("/reports/{report_id}/reopen")
 async def reopen(report_id: str, admin: User = Depends(require_admin)):
-    await db.reports.update_one({"_id": ObjectId(report_id) if ObjectId.is_valid(report_id) else None},
-                                {"$set": {"status": "open", "resolved_at": None}})
+    result = await db.reports.update_one({"_id": to_oid(report_id)}, {"$set": {"status": "open", "resolved_at": None}})
+    if not result.matched_count:
+        raise HTTPException(404, "Report not found.")
     return {"ok": True}

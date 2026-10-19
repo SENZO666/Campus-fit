@@ -51,7 +51,7 @@ function PreviewPanel({ draft, preview, loading, exerciseMap }) {
     <aside aria-labelledby="preview-title" className="on-dark bg-obsidian px-5 py-10 text-white sm:px-10 lg:sticky lg:top-0 lg:col-span-5 lg:h-screen lg:overflow-y-auto lg:px-12 lg:py-14">
       <p className="font-label text-sm font-semibold uppercase tracking-[0.2em] text-emerald-300">Live preview</p>
       <h2 id="preview-title" className="mt-2 font-display text-2xl font-bold sm:text-3xl">Your suggested week</h2>
-      <p className="mt-2 text-sm text-slate-300">Updates as you answer. You can change anything before saving.</p>
+      <p className="mt-2 text-sm text-slate-300">Updates as you answer. You can change anything before saving. Days that have already passed this week are skipped when you save.</p>
       {chips.length > 0 && (
         <ul className="mt-5 flex flex-wrap gap-2" aria-label="Your answers so far">
           {chips.map((c) => <li key={c} className="rounded-full border border-white/15 px-3 py-1 text-xs text-slate-200">{c}</li>)}

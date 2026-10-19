@@ -1,3 +1,4 @@
+import re
 from datetime import datetime, timedelta, timezone
 
 from fastapi import APIRouter, Depends, HTTPException, Request, Response
@@ -28,7 +29,6 @@ def client_ip(request: Request) -> str:
 
 @router.post("/register")
 async def register(body: RegisterIn, response: Response):
-    import re
     email = body.email.lower().strip()
     username = body.username.lower().strip().lstrip("@")
     if not re.match(USERNAME_PATTERN, username):

@@ -298,8 +298,8 @@ class JoinIn(BaseModel):
 @router.post("/challenges/join")
 async def join(body: JoinIn, me: User = Depends(get_current_user)):
     c = Challenge.from_mongo(await db.challenges.find_one({"code": body.code.strip().upper()}))
-    owner = await get_user(c.owner_id) if c else None
-    if not c or (owner and blocked_between(me, owner)):
+    members = (await users_by_ids(c.member_ids)).values() if c else []
+    if not c or any(blocked_between(me, m) for m in members):
         raise HTTPException(404, "No challenge found with that code.")
     if me.id in c.member_ids:
         raise HTTPException(400, "You're already in this challenge.")

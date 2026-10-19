@@ -5,6 +5,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { TEMPLATES } from "@/lib/constants";
 import { formatShort } from "@/lib/dates";
 import { plural, prescription, restLabel } from "@/lib/format";
@@ -69,11 +70,14 @@ export function SessionEditor({ session, number, dayOptions, busy, exerciseMap, 
       <div className="mt-6 grid gap-4 sm:grid-cols-3">
         <div>
           <Label htmlFor={`day-${id}`} className="text-sm font-medium">Day</Label>
-          <select id={`day-${id}`} value={session.date} onChange={(e) => onChange({ date: e.target.value })}
-            data-testid={`plan-session-day-${number}`}
-            className="mt-2 h-11 w-full rounded-lg border border-slate-400 bg-white px-3 text-sm text-slate-900">
-            {dayOptions.map((d) => <option key={d} value={d}>{formatShort(d)}</option>)}
-          </select>
+          <Select value={session.date} onValueChange={(v) => onChange({ date: v })}>
+            <SelectTrigger id={`day-${id}`} data-testid={`plan-session-day-${number}`} className="mt-2 h-11 rounded-lg border-slate-400 bg-white">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {dayOptions.map((d) => <SelectItem key={d} value={d} data-testid={`plan-day-option-${d}`}>{formatShort(d)}</SelectItem>)}
+            </SelectContent>
+          </Select>
         </div>
         <div>
           <Label htmlFor={`time-${id}`} className="text-sm font-medium">Start time</Label>

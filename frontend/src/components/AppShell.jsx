@@ -87,9 +87,12 @@ export function AppShell() {
   const location = useLocation();
   const mainRef = useRef(null);
   const [menuOpen, setMenuOpen] = useState(false);
+  const lastPath = useRef(location.pathname);
   const items = user.role === "admin" ? ADMIN_NAV : STUDENT_NAV;
 
   useEffect(() => {
+    if (lastPath.current === location.pathname) return;
+    lastPath.current = location.pathname;
     window.scrollTo(0, 0);
     mainRef.current?.focus({ preventScroll: true });
   }, [location.pathname]);
